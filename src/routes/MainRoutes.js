@@ -19,6 +19,12 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
+// manage-users
+const Users = Loadable(lazy(() => import('pages/manage_user/users')));
+const UserGroups = Loadable(lazy(() => import('pages/manage_user/user_groups')));
+const Role = Loadable(lazy(() => import('pages/manage_user/role')));
+const Permission = Loadable(lazy(() => import('pages/manage_user/permission')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -65,6 +71,24 @@ const MainRoutes = {
         {
             path: '/sample-page',
             element: <SamplePage />
+        },
+
+        // manage users
+        {
+            path: '/manage-users/users',
+            element: <Users />
+        },
+        {
+            path: '/manage-users/user-groups',
+            element: <UserGroups />
+        },
+        {
+            path: '/manage-users/role',
+            element: <Role />
+        },
+        {
+            path: '/manage-users/permission',
+            element: <Permission />
         }
     ]
 };
