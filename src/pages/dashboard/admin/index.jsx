@@ -70,9 +70,22 @@ const _viewChartData = {
         title: {
             text: 'Traffic Sources'
         },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                dataLabels: {
+                    position: 'top' // top, center, bottom
+                }
+            }
+        },
         dataLabels: {
             enabled: true,
-            enabledOnSeries: [1]
+            enabledOnSeries: [1],
+            offsetY: -10,
+            style: {
+                fontSize: '12px',
+                colors: ['#304758']
+            }
         },
         labels: [
             '01 Jan 2001',

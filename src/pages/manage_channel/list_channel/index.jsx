@@ -10,13 +10,16 @@ import StyledTableRow from 'components/tables/StyledTableRow';
 import ButtonCreate from 'components/buttons/ButtonCreate';
 import ButtonDelete from 'components/buttons/ButtonDelete';
 import ButtonEdit from 'components/buttons/ButtonEdit';
-import ButtonDetail from 'components/buttons/ButtonDetail';
 
 // Model
 import ModalDetail from 'components/modals/ModalDetail';
+import ModalConfirm from 'components/modals/ModalConfirm';
 
 // Form
-import CreateUserForm from 'components/form/CreateUserForm';
+import CreateChannelForm from '../components/CreateChannelForm';
+import EditChannelForm from '../components/EditChannelForm';
+
+import { toast } from 'react-toastify';
 
 import {
     Box,
@@ -29,37 +32,35 @@ import {
     Paper,
     TablePagination,
     CircularProgress,
-    Typography
+    Typography,
+    Avatar
 } from '@mui/material';
 
 const listData = [
     {
         id: 1,
-        name: 'Vu Pham',
+        channel_name: 'VTC Nows',
         email: 'vtc@gmail.com',
-        role: ['user', 'user-group', 'admin'],
         status: 'Active'
     },
     {
         id: 2,
-        name: 'Huy Che',
+        channel_name: 'Kenh 14',
         email: 'vtc@gmail.com',
-        role: ['user', 'admin'],
         status: 'Active'
     },
     {
         id: 3,
-        name: 'Thuan Luu',
+        channel_name: 'Zing news',
         email: 'vtc@gmail.com',
-        role: ['user'],
         status: 'Active'
     }
 ];
 
-function Users(props) {
-    const [loading, setLoading] = useState(false);
+function ListChannels(props) {
+    const [loading, setLoading] = useState(true);
 
-    const [tableData, setTableData] = useState([...listData]);
+    const [tableData, setTableData] = useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -69,10 +70,35 @@ function Users(props) {
         open: false,
         data: null
     });
+    const [showModalDelete, setShowModalDelete] = useState({
+        open: false,
+        data: null
+    });
     const [showModalDetail, setShowModalDetail] = useState({
         open: false,
         data: null
     });
+
+    useEffect(() => {
+        // eslint-disable-next-line no-use-before-define
+        getListChannel();
+    }, []);
+
+    // declare function
+    const getListChannel = async () => {
+        setLoading(true);
+        try {
+            const response = [...listData];
+            if (response.length < 0) throw new Error('Somethings errors');
+            setTimeout(() => {
+                setTableData([...response]);
+                setLoading(false);
+            }, 500);
+        } catch (error) {
+            console.log('error :>> ', error);
+            setLoading(false);
+        }
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -83,15 +109,41 @@ function Users(props) {
         setPage(0);
     };
 
+    const onCreateChannelSuccess = () => {
+        setShowModalCreate(false);
+        getListChannel();
+    };
+
+    const onEditChannelSuccess = () => {
+        setShowModalEdit({ ...showModalEdit, open: false, data: null });
+        getListChannel();
+        // get List of channels
+    };
+
+    const onDeleteChannel = async (event) => {
+        setLoading(true);
+        try {
+            setShowModalDelete({ ...showModalDelete, open: false, data: null });
+            // call api
+            setTimeout(() => {
+                toast.success(`Delete Channel ${event.channel_name} success`);
+                getListChannel();
+            }, 800);
+        } catch (error) {
+            console.log('error :>> ', error);
+            toast.success(error?.message || 'Somethings error');
+            setLoading(false);
+        }
+    };
+
     return (
-        <MainCard title="Users" secondary={<ButtonCreate title="Add User" handleClick={() => setShowModalCreate(true)} />}>
+        <MainCard title="List Channels" secondary={<ButtonCreate title="Add Channel" handleClick={() => setShowModalCreate(true)} />}>
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Name</StyledTableCell>
-                            <StyledTableCell>Email</StyledTableCell>
-                            <StyledTableCell>Role</StyledTableCell>
+                            <StyledTableCell align="center">Avatar</StyledTableCell>
+                            <StyledTableCell>{`Channel's Name`}</StyledTableCell>
                             <StyledTableCell>Status</StyledTableCell>
                             <StyledTableCell align="center" style={{ width: '20%' }}>
                                 Actions
@@ -120,27 +172,23 @@ function Users(props) {
                             (rowsPerPage > 0 ? tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : tableData).map(
                                 (item, index) => (
                                     <StyledTableRow key={index}>
+                                        <StyledTableCell align="center">
+                                            <Avatar
+                                                alt="Avatar"
+                                                src="https://picsum.photos/200"
+                                                sx={{ width: 45, height: 45, margin: '0 auto !important', objectFit: 'cover' }}
+                                            />
+                                        </StyledTableCell>
                                         <StyledTableCell>
                                             <Typography variant="h4" gutterBottom component="div">
-                                                {item.name}
+                                                {item.channel_name}
                                             </Typography>
                                         </StyledTableCell>
-                                        <StyledTableCell>{item.email}</StyledTableCell>
                                         <StyledTableCell>
-                                            {item.role.map((item, index) => (
-                                                <Chip
-                                                    key={index}
-                                                    size="small"
-                                                    sx={{ background: '#00C853', color: '#fff', margin: '2px' }}
-                                                    label={item}
-                                                />
-                                            ))}
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            <Chip size="small" color="primary" label="Active" />
+                                            <Chip size="small" color="primary" label={item.status} />
                                         </StyledTableCell>
                                         <StyledTableCell align="center" style={{ width: '20%' }}>
-                                            <ButtonDetail
+                                            {/* <ButtonDetail
                                                 handleClick={() =>
                                                     setShowModalDetail({
                                                         ...showModalDetail,
@@ -148,7 +196,7 @@ function Users(props) {
                                                         data: { ...item, type: 'show detail' }
                                                     })
                                                 }
-                                            />
+                                            /> */}
 
                                             <ButtonEdit
                                                 handleClick={() =>
@@ -160,7 +208,15 @@ function Users(props) {
                                                 }
                                             />
 
-                                            <ButtonDelete handleClick={() => console.log('Delete')} />
+                                            <ButtonDelete
+                                                handleClick={() =>
+                                                    setShowModalDelete({
+                                                        ...showModalDelete,
+                                                        open: true,
+                                                        data: { ...item, type: 'show edit' }
+                                                    })
+                                                }
+                                            />
                                         </StyledTableCell>
                                     </StyledTableRow>
                                 )
@@ -189,28 +245,36 @@ function Users(props) {
             {/* Modal create */}
             <ModalDetail
                 // eslint-disable-next-line react/jsx-curly-brace-presence
-                title={'Add User'}
+                title={'Add Channel'}
                 // eslint-disable-next-line react/jsx-curly-brace-presence
                 maxWidth={'md'}
                 onClose={() => setShowModalCreate(null)}
                 aria-labelledby="customized-dialog-title"
                 open={Boolean(showModalCreate)}
             >
-                <CreateUserForm />
+                <CreateChannelForm onSuccess={onCreateChannelSuccess} />
             </ModalDetail>
 
             {/* Modal edit */}
             <ModalDetail
                 // eslint-disable-next-line react/jsx-curly-brace-presence
-                title={'Edit User'}
+                title={'Edit Channel'}
                 // eslint-disable-next-line react/jsx-curly-brace-presence
                 maxWidth={'md'}
                 onClose={() => setShowModalEdit({ ...showModalEdit, open: false, data: null })}
                 aria-labelledby="customized-dialog-title"
                 open={Boolean(showModalEdit.open)}
             >
-                <Typography gutterBottom>{`${showModalEdit.data?.name} - ${showModalEdit.data?.type}`}</Typography>
+                <EditChannelForm channelData={{ ...showModalEdit.data }} onSuccess={onEditChannelSuccess} />
             </ModalDetail>
+
+            <ModalConfirm
+                onClose={() => setShowModalDelete({ ...showModalDelete, open: false, data: null })}
+                aria-labelledby="customized-dialog-title"
+                open={Boolean(showModalDelete.open)}
+                data={{ ...showModalDelete.data }}
+                onConfirm={onDeleteChannel}
+            />
 
             {/* Modal detail */}
             <ModalDetail
@@ -228,4 +292,4 @@ function Users(props) {
     );
 }
 
-export default Users;
+export default ListChannels;

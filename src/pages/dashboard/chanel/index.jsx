@@ -45,9 +45,22 @@ const _viewChartData = {
         title: {
             text: 'Traffic Sources'
         },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                dataLabels: {
+                    position: 'top' // top, center, bottom
+                }
+            }
+        },
         dataLabels: {
             enabled: true,
-            enabledOnSeries: [1]
+            enabledOnSeries: [1],
+            offsetY: -10,
+            style: {
+                fontSize: '12px',
+                colors: ['#304758']
+            }
         },
         labels: [
             '01 Jan 2001',
@@ -128,6 +141,7 @@ const columns = [
         headerName: 'Info Channel',
         minWidth: 400,
         flex: 4,
+        sortable: false,
         headerClassName: 'headerCustom',
         renderCell: (params) => {
             const getData = () => {
@@ -165,6 +179,7 @@ const columns = [
         field: 'status',
         headerName: 'Status',
         minWidth: 90,
+        sortable: false,
         flex: 1,
         headerClassName: 'headerCustom',
         renderCell: (params) => {
@@ -190,6 +205,7 @@ const columns = [
         field: 'videos',
         headerName: 'Videos',
         minWidth: 150,
+        sortable: false,
         flex: 1,
         headerClassName: 'headerCustom',
         renderCell: (params) => {
@@ -220,6 +236,7 @@ const columns = [
         field: 'views',
         headerName: 'Views',
         minWidth: 150,
+        sortable: false,
         flex: 1,
         headerClassName: 'headerCustom',
         renderCell: (params) => {
@@ -249,6 +266,7 @@ const columns = [
     {
         field: 'subcribes',
         headerName: 'Subcribes',
+        sortable: false,
         minWidth: 150,
         flex: 1,
         headerClassName: 'headerCustom',
@@ -440,7 +458,9 @@ const DashboardChannel = () => {
                     <DataGrid
                         // eslint-disable-next-line react/jsx-boolean-value
                         // loading={true}
-
+                        disableColumnFilter
+                        disableColumnMenu
+                        disableColumnSelector
                         sx={{
                             boxShadow: 2,
                             backgroundColor: '#fff',
@@ -452,16 +472,27 @@ const DashboardChannel = () => {
                             '& .MuiDataGrid-row': {
                                 height: '200px !important'
                             },
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            // scrollbar
+                            '& ::-webkit-scrollbar': {
+                                width: '6px',
+                                height: '6px'
+                            },
+                            '& ::-webkit-scrollbar-track': {
+                                boxShadow: 'inset 0 0 5px grey',
+                                borderRadius: '10px'
+                            },
+                            '& ::-webkit-scrollbar-thumb': {
+                                background: '#90CAF9',
+                                borderRadius: '10px'
+                            },
+                            '& ::-webkit-scrollbar-thumb:hover': {
+                                background: '#2196F3'
+                            }
                         }}
                         // eslint-disable-next-line arrow-body-style
                         getRowHeight={({ id, densityFactor }) => {
-                            // if (id === 0) {
-                            //     return 100 * densityFactor;
-                            // }
-
-                            // return null;
-                            return 140 * densityFactor;
+                            return 140;
                         }}
                         rows={rows}
                         columns={columns}

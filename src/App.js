@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import 'react-toastify/dist/ReactToastify.css';
 
 // toastify
 import { ToastContainer } from 'react-toastify';
@@ -25,7 +26,6 @@ const App = () => {
             <ThemeProvider theme={themes(customization)}>
                 <CssBaseline />
                 <NavigationScroll>
-                    <Routes />
                     <ToastContainer
                         position="top-right"
                         autoClose={3000}
@@ -37,6 +37,7 @@ const App = () => {
                         draggable
                         pauseOnHover
                     />
+                    <Routes />
                 </NavigationScroll>
             </ThemeProvider>
         </StyledEngineProvider>

@@ -25,6 +25,9 @@ const UserGroups = Loadable(lazy(() => import('pages/manage_user/user_groups')))
 const Role = Loadable(lazy(() => import('pages/manage_user/role')));
 const Permission = Loadable(lazy(() => import('pages/manage_user/permission')));
 
+// manage-channels
+const ListChannels = Loadable(lazy(() => import('pages/manage_channel/list_channel')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -90,6 +93,11 @@ const MainRoutes = {
         {
             path: '/manage-users/permission',
             element: <Permission />
+        },
+        // manage channels
+        {
+            path: '/manage-channels/list-channels',
+            element: <ListChannels />
         }
     ]
 };

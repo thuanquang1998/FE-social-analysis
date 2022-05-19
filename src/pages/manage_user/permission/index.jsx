@@ -107,6 +107,15 @@ function Permission(props) {
                 </Table>
             </TableContainer>
             <TablePagination
+                // sx={{
+                //     textAlign: 'center',
+                //     '& .MuiTablePagination-selectLabel': {
+                //         marginBottom: 0
+                //     },
+                //     '& .MuiTablePagination-displayedRows': {
+                //         marginBottom: 0
+                //     }
+                // }}
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={servicesRender.length}
