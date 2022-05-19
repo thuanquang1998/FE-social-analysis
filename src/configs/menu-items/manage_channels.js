@@ -13,10 +13,18 @@ const manage_channels = {
     type: 'group',
     children: [
         {
-            id: 'list-channels',
-            title: 'List Channels',
+            id: 'channels-youtube',
+            title: 'Channels Youtube',
             type: 'item',
-            url: '/manage-channels/list-channels',
+            url: '/manage-channels/channels-youtube',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
+        },
+        {
+            id: 'channels-tiktok',
+            title: 'Channels Tiktok',
+            type: 'item',
+            url: '/manage-channels/channels-tiktok',
             icon: icons.IconDashboard,
             breadcrumbs: false
         }

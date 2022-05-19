@@ -26,7 +26,8 @@ const Role = Loadable(lazy(() => import('pages/manage_user/role')));
 const Permission = Loadable(lazy(() => import('pages/manage_user/permission')));
 
 // manage-channels
-const ListChannels = Loadable(lazy(() => import('pages/manage_channel/list_channel')));
+const ChannelsTiktok = Loadable(lazy(() => import('pages/manage_channel/channels-tiktok')));
+const ChannelsYoutube = Loadable(lazy(() => import('pages/manage_channel/channels-youtube')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -96,8 +97,12 @@ const MainRoutes = {
         },
         // manage channels
         {
-            path: '/manage-channels/list-channels',
-            element: <ListChannels />
+            path: '/manage-channels/channels-youtube',
+            element: <ChannelsYoutube />
+        },
+        {
+            path: '/manage-channels/channels-tiktok',
+            element: <ChannelsTiktok />
         }
     ]
 };

@@ -16,8 +16,8 @@ import ModalDetail from 'components/modals/ModalDetail';
 import ModalConfirm from 'components/modals/ModalConfirm';
 
 // Form
-import CreateChannelForm from '../components/CreateChannelForm';
-import EditChannelForm from '../components/EditChannelForm';
+import CreateChannelForm from './components/CreateChannelForm';
+import EditChannelForm from './components/EditChannelForm';
 
 import { toast } from 'react-toastify';
 
@@ -57,7 +57,7 @@ const listData = [
     }
 ];
 
-function ListChannels(props) {
+function ChannelsYoutube(props) {
     // =================================== STATE ===================================
     const [loading, setLoading] = useState(true);
 
@@ -137,7 +137,7 @@ function ListChannels(props) {
     };
 
     return (
-        <MainCard title="List Channels" secondary={<ButtonCreate title="Add Channel" handleClick={() => setShowModalCreate(true)} />}>
+        <MainCard title="Channels Youtube" secondary={<ButtonCreate title="Add Channel" handleClick={() => setShowModalCreate(true)} />}>
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableHead>
@@ -292,4 +292,4 @@ function ListChannels(props) {
     );
 }
 
-export default ListChannels;
+export default ChannelsYoutube;
