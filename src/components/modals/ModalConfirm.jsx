@@ -46,7 +46,7 @@ function ModalConfirm({ open, onClose, title = 'Modal', minWidth = 'sm', data, o
                 </Typography>
 
                 <Stack direction="row" spacing={2} justifyContent="center" sx={{ marginTop: '20px' }}>
-                    <Button variant="contained" sx={{ background: '#9E9E9E', '&:hover': { background: '#9E9E9E' } }}>
+                    <Button variant="contained" sx={{ background: '#9E9E9E', '&:hover': { background: '#9E9E9E' } }} onClick={onClose}>
                         Cancel
                     </Button>
                     <Button
