@@ -58,6 +58,7 @@ const listData = [
 ];
 
 function ListChannels(props) {
+    // =================================== STATE ===================================
     const [loading, setLoading] = useState(true);
 
     const [tableData, setTableData] = useState([]);
@@ -79,12 +80,13 @@ function ListChannels(props) {
         data: null
     });
 
+    // =================================== HOOKS ===================================
     useEffect(() => {
         // eslint-disable-next-line no-use-before-define
         getListChannel();
     }, []);
 
-    // declare function
+    // =================================== FUNCTIONS ===================================
     const getListChannel = async () => {
         setLoading(true);
         try {
@@ -103,7 +105,6 @@ function ListChannels(props) {
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
@@ -117,7 +118,6 @@ function ListChannels(props) {
     const onEditChannelSuccess = () => {
         setShowModalEdit({ ...showModalEdit, open: false, data: null });
         getListChannel();
-        // get List of channels
     };
 
     const onDeleteChannel = async (event) => {

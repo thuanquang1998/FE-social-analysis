@@ -10,13 +10,16 @@ import StyledTableRow from 'components/tables/StyledTableRow';
 import ButtonCreate from 'components/buttons/ButtonCreate';
 import ButtonDelete from 'components/buttons/ButtonDelete';
 import ButtonEdit from 'components/buttons/ButtonEdit';
-import ButtonDetail from 'components/buttons/ButtonDetail';
 
 // Model
 import ModalDetail from 'components/modals/ModalDetail';
+import ModalConfirm from 'components/modals/ModalConfirm';
 
 // Form
-import CreateUserForm from 'components/form/CreateUserForm';
+import CreateUserForm from './components/CreateUserForm';
+import EditUserForm from './components/EditUserForm';
+
+import { toast } from 'react-toastify';
 
 import {
     Box,
@@ -57,15 +60,20 @@ const listData = [
 ];
 
 function Users(props) {
+    // =================================== STATE ===================================
     const [loading, setLoading] = useState(false);
 
-    const [tableData, setTableData] = useState([...listData]);
+    const [tableData, setTableData] = useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    // state modals CRUD
+    // STATE: modals CRUD
     const [showModalCreate, setShowModalCreate] = useState(false);
     const [showModalEdit, setShowModalEdit] = useState({
+        open: false,
+        data: null
+    });
+    const [showModalDelete, setShowModalDelete] = useState({
         open: false,
         data: null
     });
@@ -74,13 +82,58 @@ function Users(props) {
         data: null
     });
 
+    // =================================== HOOKS ===================================
+    useEffect(() => {
+        // eslint-disable-next-line no-use-before-define
+        getListUsers();
+    }, []);
+
+    // =================================== FUNCTIONS ===================================
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const getListUsers = async () => {
+        setLoading(true);
+        try {
+            const response = [...listData];
+            if (response.length < 0) throw new Error('Somethings errors');
+            setTimeout(() => {
+                setTableData([...response]);
+                setLoading(false);
+            }, 800);
+        } catch (error) {
+            console.log('error :>> ', error);
+            setLoading(false);
+        }
+    };
+
+    const onCreateUserSuccess = () => {
+        setShowModalCreate(false);
+        getListUsers();
+    };
+    const onEditUserSuccess = () => {
+        setShowModalEdit({ ...showModalEdit, open: false, data: null });
+        getListUsers();
+    };
+    const onDeleteUser = async (event) => {
+        setLoading(true);
+        try {
+            setShowModalDelete({ ...showModalDelete, open: false, data: null });
+            // call api
+            setTimeout(() => {
+                toast.success(`Delete Channel ${event.name} success`);
+                getListUsers();
+            }, 800);
+        } catch (error) {
+            console.log('error :>> ', error);
+            toast.success(error?.message || 'Somethings error');
+            setLoading(false);
+        }
     };
 
     return (
@@ -140,7 +193,7 @@ function Users(props) {
                                             <Chip size="small" color="primary" label="Active" />
                                         </StyledTableCell>
                                         <StyledTableCell align="center" style={{ width: '20%' }}>
-                                            <ButtonDetail
+                                            {/* <ButtonDetail
                                                 handleClick={() =>
                                                     setShowModalDetail({
                                                         ...showModalDetail,
@@ -148,19 +201,27 @@ function Users(props) {
                                                         data: { ...item, type: 'show detail' }
                                                     })
                                                 }
-                                            />
+                                            /> */}
 
                                             <ButtonEdit
                                                 handleClick={() =>
                                                     setShowModalEdit({
                                                         ...showModalEdit,
                                                         open: true,
-                                                        data: { ...item, type: 'show edit' }
+                                                        data: { ...item }
                                                     })
                                                 }
                                             />
 
-                                            <ButtonDelete handleClick={() => console.log('Delete')} />
+                                            <ButtonDelete
+                                                handleClick={() =>
+                                                    setShowModalDelete({
+                                                        ...showModalDelete,
+                                                        open: true,
+                                                        data: { ...item }
+                                                    })
+                                                }
+                                            />
                                         </StyledTableCell>
                                     </StyledTableRow>
                                 )
@@ -169,15 +230,6 @@ function Users(props) {
                 </Table>
             </TableContainer>
             <TablePagination
-                // sx={{
-                //     textAlign: 'center',
-                //     '& .MuiTablePagination-selectLabel': {
-                //         marginBottom: 0
-                //     },
-                //     '& .MuiTablePagination-displayedRows': {
-                //         marginBottom: 0
-                //     }
-                // }}
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={tableData.length}
@@ -196,7 +248,7 @@ function Users(props) {
                 aria-labelledby="customized-dialog-title"
                 open={Boolean(showModalCreate)}
             >
-                <CreateUserForm />
+                <CreateUserForm onSuccess={onCreateUserSuccess} />
             </ModalDetail>
 
             {/* Modal edit */}
@@ -209,8 +261,17 @@ function Users(props) {
                 aria-labelledby="customized-dialog-title"
                 open={Boolean(showModalEdit.open)}
             >
-                <Typography gutterBottom>{`${showModalEdit.data?.name} - ${showModalEdit.data?.type}`}</Typography>
+                <EditUserForm channelData={{ ...showModalEdit.data }} onSuccess={onEditUserSuccess} />
             </ModalDetail>
+
+            {/* Modal delete */}
+            <ModalConfirm
+                onClose={() => setShowModalDelete({ ...showModalDelete, open: false, data: null })}
+                aria-labelledby="customized-dialog-title"
+                open={Boolean(showModalDelete.open)}
+                data={{ ...showModalDelete.data }}
+                onConfirm={onDeleteUser}
+            />
 
             {/* Modal detail */}
             <ModalDetail
