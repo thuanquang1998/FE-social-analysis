@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
@@ -33,7 +33,8 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <DashboardDefault />
+            // element: <DashboardDefault />
+            element: <Navigate to="/dashboard/default" replace />
         },
         // demo routes
         {
