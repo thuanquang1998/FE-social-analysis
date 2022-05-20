@@ -38,23 +38,26 @@ import {
 const listData = [
     {
         id: 1,
-        name: 'Vu Pham',
+        fullName: 'Vu Pham',
         email: 'vtc@gmail.com',
         role: ['user', 'user-group', 'admin'],
+        user_group: ['Moli Digital', 'Moli Labs', 'Moli Stars'],
         status: 'Active'
     },
     {
         id: 2,
-        name: 'Huy Che',
+        fullName: 'Huy Che',
         email: 'vtc@gmail.com',
         role: ['user', 'admin'],
+        user_group: ['Moli Digital', 'Moli Stars'],
         status: 'Active'
     },
     {
         id: 3,
-        name: 'Thuan Luu',
+        fullName: 'Thuan Luu',
         email: 'vtc@gmail.com',
         role: ['user'],
+        user_group: ['Moli Stars'],
         status: 'Active'
     }
 ];
@@ -145,6 +148,7 @@ function Users(props) {
                             <StyledTableCell>Name</StyledTableCell>
                             <StyledTableCell>Email</StyledTableCell>
                             <StyledTableCell>Role</StyledTableCell>
+                            <StyledTableCell>User Groups</StyledTableCell>
                             <StyledTableCell>Status</StyledTableCell>
                             <StyledTableCell align="center" style={{ width: '20%' }}>
                                 Actions
@@ -175,12 +179,22 @@ function Users(props) {
                                     <StyledTableRow key={index}>
                                         <StyledTableCell>
                                             <Typography variant="h4" gutterBottom component="div">
-                                                {item.name}
+                                                {item.fullName}
                                             </Typography>
                                         </StyledTableCell>
                                         <StyledTableCell>{item.email}</StyledTableCell>
                                         <StyledTableCell>
                                             {item.role.map((item, index) => (
+                                                <Chip
+                                                    key={index}
+                                                    size="small"
+                                                    sx={{ background: '#00C853', color: '#fff', margin: '2px' }}
+                                                    label={item}
+                                                />
+                                            ))}
+                                        </StyledTableCell>
+                                        <StyledTableCell>
+                                            {item.user_group.map((item, index) => (
                                                 <Chip
                                                     key={index}
                                                     size="small"
@@ -261,7 +275,7 @@ function Users(props) {
                 aria-labelledby="customized-dialog-title"
                 open={Boolean(showModalEdit.open)}
             >
-                <EditUserForm channelData={{ ...showModalEdit.data }} onSuccess={onEditUserSuccess} />
+                <EditUserForm userData={{ ...showModalEdit.data }} onSuccess={onEditUserSuccess} />
             </ModalDetail>
 
             {/* Modal delete */}

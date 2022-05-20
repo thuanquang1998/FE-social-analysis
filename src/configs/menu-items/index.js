@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import dashboard from './dashboard';
 import pages from './pages';
 import utilities from './utilities';
@@ -11,7 +12,12 @@ import manage_channels from './manage_channels';
 
 const menuItems = {
     // eslint-disable-next-line camelcase
-    items: [dashboard, manage_channels, manage_users, pages, utilities, other]
+    items: [
+        dashboard,
+        manage_channels,
+        manage_users
+        // pages, utilities, other
+    ]
 };
 
 export default menuItems;

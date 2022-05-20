@@ -37,10 +37,8 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            // element: <DashboardDefault />
-            element: <Navigate to="/dashboard/default" replace />
+            element: <Navigate to="/dashboard/admin" replace />
         },
-        // demo routes
         {
             path: '/dashboard/admin',
             element: <DashboardAdmin />

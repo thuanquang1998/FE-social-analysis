@@ -1,51 +1,54 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable react/button-has-type */
-/* eslint-disable jsx-a11y/img-redundant-alt */
-/* eslint-disable react/jsx-no-comment-textnodes */
 import { useState } from 'react';
 // material
-// eslint-disable-next-line import/no-duplicates
-import { Link, Stack, Grid, TextField, IconButton, InputAdornment, Box, Avatar, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-// eslint-disable-next-line import/no-duplicates
-import { CircularProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Stack, Grid, Box, Button, CircularProgress } from '@mui/material';
 // component
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { styled } from '@mui/material/styles';
 import { toast } from 'react-toastify';
 
+// form controls
+import InputField from 'components/form/form-control/InputField';
+import SelectMultiField from 'components/form/form-control/SelectMultiField';
+
 // ----------------------------------------------------------------------
+const GridItem = styled(Grid)({
+    '& .MuiFormControl-root ': {
+        marginTop: '2rem'
+    }
+});
+// const formData = {
+//     fullName: '',
+//     email: '',
+//     password: '',
+//     confirmPassword: '',
+//     role: '', //select
+//     user_group: '' //select
+// };
 
 export default function EditUsersForm({ userData, onSuccess }) {
-    const [showPassword, setShowPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const handleShowPassword = () => {
-        setShowPassword((show) => !show);
-    };
-
     //   ---------------------- setup hook form ----------------------
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required('Username is required'),
-        password: Yup.string().required('Password is required')
+        fullName: Yup.string().required('Fullname is required'),
+        email: Yup.string().required('Email is required').email('Email is not valid')
+        // role: Yup.array().min(1, 'Role is required')
+        // user_group: Yup.string().required('UserGroup is required')
     });
     const defaultValues = {
-        username: '',
-        password: '',
         ...userData
     };
     const formOptions = {
         defaultValues: { ...defaultValues },
         resolver: yupResolver(validationSchema)
     };
-    const { register, handleSubmit, setError, formState } = useForm(formOptions);
-    const { errors } = formState;
+    const { handleSubmit, control } = useForm(formOptions);
 
     async function onSubmit(data) {
         setIsSubmitting(true);
         try {
-            console.log('data :>> ', data);
+            console.log('data onSubmit EditUsersForm:>> ', data);
             // call api edit channel
             // onCreateChannel(data);
             setTimeout(() => {
@@ -58,51 +61,59 @@ export default function EditUsersForm({ userData, onSuccess }) {
         // setIsSubmitting(false);
     }
     //   -------------------------------------------------------------
-    console.log('formState.isSubmitting :>> ', formState.isSubmitting);
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={3}>
-                <TextField
-                    {...register('username')}
-                    fullWidth
-                    autoComplete="username"
-                    type="text"
-                    label="Username"
-                    error={Boolean(errors.username)}
-                    helperText={Boolean(errors.username) && errors.username.message}
-                />
-
-                <TextField
-                    fullWidth
-                    {...register('password')}
-                    autoComplete="current-password"
-                    type={showPassword ? 'text' : 'password'}
-                    label="Password"
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={handleShowPassword} edge="end">
-                                    {/* <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} /> */}
-                                </IconButton>
-                            </InputAdornment>
-                        )
-                    }}
-                    error={Boolean(errors.password)}
-                    helperText={Boolean(errors.password) && errors.password.message}
-                />
-            </Stack>
-
-            <LoadingButton
-                sx={{ marginTop: '1rem' }}
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                loading={isSubmitting}
-                loadingIndicator={<CircularProgress color="inherit" size={16} />}
+            <Box
+                sx={{
+                    textAlign: 'center',
+                    margin: '0 3rem',
+                    '& .Mui-disabled': {
+                        backgroundColor: '#2196f3 !important',
+                        color: '#fff'
+                    }
+                }}
             >
-                Submit
-            </LoadingButton>
+                <Stack spacing={0}>
+                    <Grid container spacing={2}>
+                        <GridItem item xs={12} sm={6}>
+                            <InputField name="fullName" label="Full Name" control={control} />
+                        </GridItem>
+                        <GridItem item xs={12} sm={6}>
+                            <InputField name="email" label="Email" control={control} />
+                        </GridItem>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <GridItem item xs={12} sm={6}>
+                            <SelectMultiField name="role" label="Role" control={control} selectData={['user', 'admin', 'user-group']} />
+                        </GridItem>
+                        <GridItem item xs={12} sm={6}>
+                            <SelectMultiField
+                                name="user_group"
+                                label="Group"
+                                control={control}
+                                selectData={['Moli Digital', 'Moli Labs', 'Moli Stars']}
+                            />
+                        </GridItem>
+                    </Grid>
+                </Stack>
+                <Button
+                    variant="contained"
+                    sx={{ marginTop: '1.5rem', marginBottom: '1rem', width: '200px', borderRadius: '12px' }}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? (
+                        <>
+                            Submit <CircularProgress color="inherit" size={16} sx={{ marginLeft: '5px' }} />
+                        </>
+                    ) : (
+                        'Submit'
+                    )}
+                </Button>
+            </Box>
         </form>
     );
 }

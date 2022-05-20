@@ -27,6 +27,7 @@
         "framer-motion": "^4.1.13",
         "history": "^5.0.0",
         "i": "^0.3.7",
+        "lodash.without": "^4.4.0",
         "material-ui-popup-state": "^1.8.0",
         "moment": "^2.29.3",
         "npm": "^8.10.0",

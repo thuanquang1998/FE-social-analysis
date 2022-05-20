@@ -12,14 +12,6 @@ const dashboard = {
     type: 'group',
     children: [
         {
-            id: 'default',
-            title: 'Dashboard',
-            type: 'item',
-            url: '/dashboard/default',
-            icon: icons.IconDashboard,
-            breadcrumbs: false
-        },
-        {
             id: 'admin',
             title: 'Dashboard Admin',
             type: 'item',
