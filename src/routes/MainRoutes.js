@@ -48,6 +48,10 @@ const MainRoutes = {
             element: <DashboardChanel />
         },
         {
+            path: '/dashboard/chanel/:id',
+            element: <DashboardChanel />
+        },
+        {
             path: '/dashboard/default',
             element: <DashboardDefault />
         },

@@ -31,8 +31,9 @@ const OutlineInputStyle = styled(OutlinedInput, { shouldForwardProp })(({ theme 
     marginLeft: 16,
     paddingLeft: 16,
     paddingRight: 16,
+    border: '1px solid #EEEEEE',
     '& input': {
-        background: 'transparent !important',
+        // background: 'transparent !important',
         paddingLeft: '4px !important'
     },
     [theme.breakpoints.down('lg')]: {
@@ -42,6 +43,9 @@ const OutlineInputStyle = styled(OutlinedInput, { shouldForwardProp })(({ theme 
         width: '100%',
         marginLeft: 4,
         background: '#fff'
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+        border: '0 !important'
     }
 }));
 

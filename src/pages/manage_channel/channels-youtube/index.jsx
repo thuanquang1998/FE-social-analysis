@@ -8,8 +8,6 @@ import StyledTableRow from 'components/tables/StyledTableRow';
 
 // button component
 import ButtonCreate from 'components/buttons/ButtonCreate';
-import ButtonDelete from 'components/buttons/ButtonDelete';
-import ButtonEdit from 'components/buttons/ButtonEdit';
 
 // Model
 import ModalDetail from 'components/modals/ModalDetail';
@@ -19,11 +17,13 @@ import ModalConfirm from 'components/modals/ModalConfirm';
 import CreateChannelForm from './components/CreateChannelForm';
 import EditChannelForm from './components/EditChannelForm';
 
+import CollapseRow from './components/CollapseRow';
 import { toast } from 'react-toastify';
+
+import { useNavigate } from 'react-router-dom';
 
 import {
     Box,
-    Chip,
     Table,
     TableBody,
     TableContainer,
@@ -32,32 +32,65 @@ import {
     Paper,
     TablePagination,
     CircularProgress,
-    Typography,
-    Avatar
+    Typography
 } from '@mui/material';
 
 const listData = [
     {
-        id: 1,
-        channel_name: 'VTC Nows',
-        email: 'vtc@gmail.com',
-        status: 'Active'
+        platform: 'TIKTOK',
+        unique_id: '123123121',
+        channel_id: '123123121',
+        title: 'VTC Nows',
+        description: 'VTC Nows description',
+        country: 'Viet Nam',
+        published_at: '20/02/2018',
+        thumbnail: 'https://picsum.photos/200',
+        subscriber_count: 500000,
+        video_count: 345,
+        view_count: 45634532,
+        like_count: 345432345,
+        created_at: '20/02/2018',
+        updated_at: '20/02/2018',
+        id: 123123123123121
     },
     {
-        id: 2,
-        channel_name: 'Kenh 14',
-        email: 'vtc@gmail.com',
-        status: 'Active'
+        platform: 'TIKTOK',
+        unique_id: '123123122',
+        channel_id: '123123122',
+        title: 'Kenh 14',
+        description: 'VTC Nows description',
+        country: 'Viet Nam',
+        published_at: '20/02/2018',
+        thumbnail: 'https://picsum.photos/200',
+        subscriber_count: 500000,
+        video_count: 345,
+        view_count: 45634532,
+        like_count: 345432345,
+        created_at: '20/02/2018',
+        updated_at: '20/02/2018',
+        id: 123123123123122
     },
     {
-        id: 3,
-        channel_name: 'Zing news',
-        email: 'vtc@gmail.com',
-        status: 'Active'
+        platform: 'TIKTOK',
+        unique_id: '123123123',
+        channel_id: '123123123',
+        title: 'Zing news',
+        description: 'VTC Nows description',
+        country: 'Viet Nam',
+        published_at: '20/02/2018',
+        thumbnail: 'https://picsum.photos/200',
+        subscriber_count: 500000,
+        video_count: 345,
+        view_count: 45634532,
+        like_count: 345432345,
+        created_at: '20/02/2018',
+        updated_at: '20/02/2018',
+        id: 123123123123123
     }
 ];
 
 function ChannelsYoutube(props) {
+    const navigate = useNavigate();
     // =================================== STATE ===================================
     const [loading, setLoading] = useState(true);
 
@@ -142,12 +175,11 @@ function ChannelsYoutube(props) {
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
+                            {/* <StyledTableCell /> */}
                             <StyledTableCell align="center">Avatar</StyledTableCell>
-                            <StyledTableCell>{`Channel's Name`}</StyledTableCell>
-                            <StyledTableCell>Status</StyledTableCell>
-                            <StyledTableCell align="center" style={{ width: '20%' }}>
-                                Actions
-                            </StyledTableCell>
+                            <StyledTableCell align="center">{`Channel's Name`}</StyledTableCell>
+                            <StyledTableCell align="center">Status</StyledTableCell>
+                            <StyledTableCell align="center">Actions</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -171,69 +203,31 @@ function ChannelsYoutube(props) {
                         {!loading &&
                             (rowsPerPage > 0 ? tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : tableData).map(
                                 (item, index) => (
-                                    <StyledTableRow key={index}>
-                                        <StyledTableCell align="center">
-                                            <Avatar
-                                                alt="Avatar"
-                                                src="https://picsum.photos/200"
-                                                sx={{ width: 45, height: 45, margin: '0 auto !important', objectFit: 'cover' }}
-                                            />
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            <Typography variant="h4" gutterBottom component="div">
-                                                {item.channel_name}
-                                            </Typography>
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            <Chip size="small" color="primary" label={item.status} />
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center" style={{ width: '20%' }}>
-                                            {/* <ButtonDetail
-                                                handleClick={() =>
-                                                    setShowModalDetail({
-                                                        ...showModalDetail,
-                                                        open: true,
-                                                        data: { ...item, type: 'show detail' }
-                                                    })
-                                                }
-                                            /> */}
-
-                                            <ButtonEdit
-                                                handleClick={() =>
-                                                    setShowModalEdit({
-                                                        ...showModalEdit,
-                                                        open: true,
-                                                        data: { ...item, type: 'show edit' }
-                                                    })
-                                                }
-                                            />
-
-                                            <ButtonDelete
-                                                handleClick={() =>
-                                                    setShowModalDelete({
-                                                        ...showModalDelete,
-                                                        open: true,
-                                                        data: { ...item, type: 'show edit' }
-                                                    })
-                                                }
-                                            />
-                                        </StyledTableCell>
-                                    </StyledTableRow>
+                                    <CollapseRow
+                                        key={index}
+                                        row={{ ...item }}
+                                        onShowDetail={() => navigate(`/dashboard/chanel/${item.id}`)}
+                                        onShowModalEdit={() =>
+                                            setShowModalEdit({
+                                                ...showModalEdit,
+                                                open: true,
+                                                data: { ...item, type: 'show edit' }
+                                            })
+                                        }
+                                        onShowModalDelete={() =>
+                                            setShowModalDelete({
+                                                ...showModalDelete,
+                                                open: true,
+                                                data: { ...item, type: 'show edit' }
+                                            })
+                                        }
+                                    />
                                 )
                             )}
                     </TableBody>
                 </Table>
             </TableContainer>
             <TablePagination
-                // sx={{
-                //     textAlign: 'center',
-                //     '& .MuiTablePagination-selectLabel': {
-                //         marginBottom: 0
-                //     },
-                //     '& .MuiTablePagination-displayedRows': {
-                //         marginBottom: 0
-                //     }
-                // }}
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={tableData.length}

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
@@ -15,7 +15,8 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 // ==============================|| SIDEBAR MENU LIST ITEMS ||============================== //
 
-const NavItem = ({ item, level }) => {
+const NavItem = ({ item, level, pathname }) => {
+    const location = useLocation();
     const theme = useTheme();
     const dispatch = useDispatch();
     const customization = useSelector((state) => state.customization);
@@ -48,10 +49,9 @@ const NavItem = ({ item, level }) => {
     }
 
     const itemHandler = (id) => {
-        dispatch({ type: MENU_OPEN, id });
+        // dispatch({ type: MENU_OPEN, id });
         if (matchesSM) dispatch({ type: SET_MENU, opened: false });
     };
-
     // active menu item on page load
     useEffect(() => {
         const currentIndex = document.location.pathname
@@ -62,7 +62,7 @@ const NavItem = ({ item, level }) => {
             dispatch({ type: MENU_OPEN, id: item.id });
         }
         // eslint-disable-next-line
-    }, []);
+    }, [location]);
 
     return (
         <ListItemButton
