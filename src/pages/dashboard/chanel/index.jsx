@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable react/jsx-boolean-value */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react/jsx-no-comment-textnodes */
 /* eslint-disable no-use-before-define */
@@ -21,13 +23,13 @@ import ChartItem from './components/ChartItem';
 import TopVideo from './components/TopVideo';
 
 // card components
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
+import 'antd/lib/date-picker/style/css';
 // datate range
 import { DatePicker } from 'antd';
 import moment from 'moment';
 
-const { RangePicker } = DatePicker;
-const dateFormat = 'YYYY/MM/DD';
+const dateFormat = 'DD/MM/YYYY';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -364,15 +366,12 @@ const rows = [
     }
 ];
 const DashboardChannel = () => {
-    const startDate = moment().subtract(7, 'd').format(dateFormat);
-    const endDate = moment().format(dateFormat);
+    const CURRENT_WEEK = moment();
     const [isLoading, setLoading] = useState(true);
     const [viewChartData, setViewChartData] = useState(null);
     const [interactiveChartData, setInteractiveChartData] = useState(null);
 
-    console.table(startDate, endDate);
-
-    const [rangeDate, setRangeDate] = useState([startDate, endDate]);
+    const [currentWeek, setCurrentWeek] = useState(CURRENT_WEEK);
 
     useEffect(() => {
         setLoading(true);
@@ -381,7 +380,7 @@ const DashboardChannel = () => {
         setTimeout(() => {
             setLoading(false);
         }, 800);
-    }, [rangeDate]);
+    }, [currentWeek]);
 
     useEffect(() => {
         if (Boolean(viewChartData) && Boolean(interactiveChartData)) {
@@ -407,15 +406,12 @@ const DashboardChannel = () => {
         }
     };
 
-    const onChangeRangeDate = (date, dateString) => {
-        if (date === null) {
-            console.log('1231231232');
-            setRangeDate([moment(startDate), moment(endDate)]);
+    const onChangeWeek = (date, dateString) => {
+        if (!date) {
+            setCurrentWeek(moment());
         } else {
-            console.log('122222222222222222222');
-            setRangeDate([...dateString]);
+            setCurrentWeek(moment(date));
         }
-        // console.log('date, dateString :>> ', date, dateString);
     };
 
     return (
@@ -435,12 +431,7 @@ const DashboardChannel = () => {
                         }
                     }}
                 >
-                    <RangePicker
-                        value={[moment(rangeDate[0]), moment(rangeDate[1])]}
-                        // defaultValue={[moment(rangeDate[0], dateFormat), moment(rangeDate[1], dateFormat)]}
-                        format={dateFormat}
-                        onChange={onChangeRangeDate}
-                    />
+                    <DatePicker value={currentWeek} onChange={onChangeWeek} format={dateFormat} picker="week" />
                 </Box>
             </Grid>
             <Grid item xs={12}>
@@ -472,6 +463,7 @@ const DashboardChannel = () => {
                             '& .MuiDataGrid-row': {
                                 height: '200px !important'
                             },
+
                             textAlign: 'center',
                             // scrollbar
                             '& ::-webkit-scrollbar': {

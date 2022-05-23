@@ -15,12 +15,12 @@ import ViewChart from './components/ViewChart';
 import ChartInteractive from './components/ChartInteractive';
 // card components
 import CardHeader from './components/CardHeader';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
+import 'antd/lib/date-picker/style/css';
 // datate range
 import { DatePicker } from 'antd';
 import moment from 'moment';
 
-const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
@@ -158,17 +158,13 @@ const _interactiveChartData = {
     }
 };
 const Dashboard = () => {
-    const startDate = moment().subtract(7, 'd').format(dateFormat);
-    const endDate = moment().format(dateFormat);
+    const CURRENT_WEEK = moment();
+
     const [isLoading, setLoading] = useState(true);
     const [viewChartData, setViewChartData] = useState(null);
     const [interactiveChartData, setInteractiveChartData] = useState(null);
 
-    console.table(startDate, endDate);
-
-    const [rangeDate, setRangeDate] = useState([startDate, endDate]);
-
-    console.log('rangeDate :>> ', rangeDate);
+    const [currentWeek, setCurrentWeek] = useState(CURRENT_WEEK);
 
     useEffect(() => {
         setLoading(true);
@@ -177,7 +173,7 @@ const Dashboard = () => {
         setTimeout(() => {
             setLoading(false);
         }, 800);
-    }, [rangeDate]);
+    }, [currentWeek]);
 
     useEffect(() => {
         if (Boolean(viewChartData) && Boolean(interactiveChartData)) {
@@ -203,15 +199,12 @@ const Dashboard = () => {
         }
     };
 
-    const onChangeRangeDate = (date, dateString) => {
-        if (date === null) {
-            console.log('1231231232');
-            setRangeDate([moment(startDate), moment(endDate)]);
+    const onChangeWeek = (date, dateString) => {
+        if (!date) {
+            setCurrentWeek(moment());
         } else {
-            console.log('122222222222222222222');
-            setRangeDate([...dateString]);
+            setCurrentWeek(moment(date));
         }
-        // console.log('date, dateString :>> ', date, dateString);
     };
 
     return (
@@ -231,12 +224,7 @@ const Dashboard = () => {
                         }
                     }}
                 >
-                    <RangePicker
-                        value={[moment(rangeDate[0]), moment(rangeDate[1])]}
-                        // defaultValue={[moment(rangeDate[0], dateFormat), moment(rangeDate[1], dateFormat)]}
-                        format={dateFormat}
-                        onChange={onChangeRangeDate}
-                    />
+                    <DatePicker value={currentWeek} onChange={onChangeWeek} format={dateFormat} picker="week" />
                 </Box>
             </Grid>
             <Grid item xs={12}>

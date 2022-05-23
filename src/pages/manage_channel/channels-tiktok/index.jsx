@@ -22,6 +22,9 @@ import { toast } from 'react-toastify';
 
 import { useNavigate } from 'react-router-dom';
 
+// services
+import channelServices from 'services/channelServices';
+
 import {
     Box,
     Table,
@@ -123,10 +126,12 @@ function ChannelsTiktok(props) {
     const getListChannel = async () => {
         setLoading(true);
         try {
-            const response = [...listData];
-            if (response.length < 0) throw new Error('Somethings errors');
+            console.log('channelServices.getListChannelTiktok() :>> ', channelServices.getListChannelTiktok());
+            const response = await channelServices.getListChannelTiktok();
+            console.log('response :>> ', response);
+            if (!response.success) throw new Error('Somethings errors');
             setTimeout(() => {
-                setTableData([...response]);
+                setTableData([...response.payload]);
                 setLoading(false);
             }, 500);
         } catch (error) {

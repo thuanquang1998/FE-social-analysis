@@ -11,7 +11,6 @@ import { store } from 'store';
 
 // style + assets
 import 'assets/scss/style.scss';
-
 // ==============================|| REACT DOM RENDER  ||============================== //
 
 ReactDOM.render(

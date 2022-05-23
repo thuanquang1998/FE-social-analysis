@@ -1,26 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-    Box,
-    Chip,
-    Table,
-    TableBody,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    TablePagination,
-    InputAdornment,
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    TextField,
-    IconButton,
-    Typography
-} from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
